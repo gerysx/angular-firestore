@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 
 export type ColumnKeys<T> = Array<keyof T>;
 
@@ -10,6 +11,8 @@ export interface Profile {
     movil: number;
     email: string;   
     pais: string;
+    created: Timestamp;
+    updated: Timestamp;
 
     
 }

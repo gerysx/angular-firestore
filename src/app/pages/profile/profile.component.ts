@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ProfileService } from './profile.service';
 import { Profile } from './profile.interface';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../auth/data-access/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -12,11 +14,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 })
 export class ProfileComponent implements OnInit {
   profileForm: FormGroup;
-  profileId: string = '123abc'; // Esto debe ser dinámico o obtenerse desde la autenticación del usuario
   profile: Profile | null = null;
 
-  constructor(private fb: FormBuilder, private profileService: ProfileService) {
-    // Inicializamos el formulario con validadores
+  constructor(
+    private fb: FormBuilder,
+    private profileService: ProfileService,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.profileForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
       apellido: ['', [Validators.required, Validators.minLength(2)]],
@@ -32,56 +37,39 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getProfile(); // Intentamos obtener el perfil desde Firestore cuando se carga el componente
-  }
-
-  getProfile(): void {
-    this.profileService
-      .getProfileById(this.profileId)
-      .then((profile) => {
-        if (profile) {
-          this.profile = profile;
-          this.profileForm.patchValue(profile); // Cargamos los valores en el formulario
-        } else {
-          this.profile = null; // No hay perfil, entonces estamos en modo de creación
-        }
-      })
-      .catch((error) => {
-        console.error('Error al obtener el perfil:', error);
-      });
-  }
-
-  onSubmit(): void {
-    const profileData = this.profileForm.value;
-    if (this.profile) {
-      // Si ya existe un perfil, lo actualizamos
-      profileData.id = this.profile.id; // Aseguramos de incluir el ID
-      this.updateProfile(profileData);
+    const user = this.authService.getUser();
+    if (user) {
+      this.getProfile();
     } else {
-      // Si no existe un perfil, lo creamos
-      this.createProfile(profileData);
+      console.error('Usuario no autenticado');
     }
   }
 
-  createProfile(profileData: Profile): void {
-    this.profileService
-      .newProfile(profileData)
-      .then((newProfile) => {
-        console.log('Perfil creado correctamente:', newProfile);
-      })
-      .catch((error) => {
-        console.error('Error al crear el perfil:', error);
-      });
+  // Obtener el perfil del usuario desde Firestore
+  getProfile(): void {
+    this.profileService.getProfile().then((profile) => {
+      if (profile) {
+        this.profile = profile;
+        this.profileForm.patchValue(profile); // Cargar los datos del perfil al formulario
+      } else {
+        this.profile = null; // Si no hay perfil, mostramos un formulario vacío
+      }
+    }).catch((error) => {
+      console.error('Error al obtener el perfil:', error);
+    });
   }
 
-  updateProfile(profileData: Profile): void {
-    this.profileService
-      .updateProfile(profileData.id, profileData)
-      .then(() => {
-        console.log('Perfil actualizado correctamente.');
+  // Crear o actualizar el perfil
+  onSubmit(): void {
+    const profileData = this.profileForm.value;
+
+    this.profileService.createOrUpdateProfile(profileData)
+      .then((updatedProfile) => {
+        console.log('Perfil actualizado o creado correctamente:', updatedProfile);
+        this.router.navigate(['/contacts']);  // Redirigir a /contacts
       })
       .catch((error) => {
-        console.error('Error al actualizar el perfil:', error);
+        console.error('Error al crear o actualizar el perfil:', error);
       });
   }
 }
