@@ -1,0 +1,33 @@
+footer {
+    display: flex;
+    justify-content: space-between; /* Distribuye el espacio entre el texto y los iconos */
+    align-items: center; /* Alinea los iconos y el texto verticalmente al centro */
+    padding: 10px 0; /* Padding vertical */
+    width: 100%; /* Asegura que el footer ocupe todo el ancho disponible */
+    max-width: 99,5%; /* o el ancho que prefieras */
+    margin: 0 auto;    /* Esto centra el footer */
+  }
+  
+  footer mat-icon {
+    width: 20px; /* Tamaño de los iconos */
+    height: 20px; /* Tamaño de los iconos */
+    fill: white; /* Color blanco para los iconos */
+  }
+
+  .mat-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  footer a {
+    margin-right: 16px; /* Espacio entre los iconos */
+  }
+  
+  footer span {
+    font-size: 12px; /* Tamaño pequeño para el texto */
+    margin-left: 16px; /* Espacio para el texto de derechos reservados */
+  }
+  

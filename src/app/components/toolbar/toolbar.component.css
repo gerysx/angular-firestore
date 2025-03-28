@@ -1,0 +1,31 @@
+ /* Agregar la fuente Poppins a todo el toolbar */
+ .font-poppins {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  /* Asegurar que los iconos tengan el mismo tamaño y estén centrados */
+  .mat-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Estilo para los botones, texto más pequeño */
+  .mat-button, .mat-icon {
+    font-size: 0.875rem; /* Tamaño de texto más pequeño */
+  }
+
+  /* Personalización para los enlaces del dropdown */
+  mat-button {
+    border-radius: 0.375rem; /* Bordes suaves */
+  }
+
+  /* Asegurar que los botones tengan un tamaño adecuado y el texto se vea alineado */
+  a.mat-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px; /* Asegurando que todos los botones tengan la misma altura */
+  }

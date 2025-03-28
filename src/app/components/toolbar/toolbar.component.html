@@ -1,0 +1,77 @@
+<mat-toolbar
+  color="primary"
+  class="bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-800 shadow-lg text-white px-4 py-1 flex items-center justify-between border-b border-gray-700 rounded-t-lg w-full z-50"
+>
+  <!-- Logo o Home -->
+  <a
+    mat-button
+    routerLink="/home"
+    class="flex items-center space-x-2 hover:bg-indigo-700 p-1 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
+  >
+    <mat-icon class="text-xs">home</mat-icon>
+    <span class="font-medium text-xs tracking-wide">Home</span>
+  </a>
+
+  <ng-container *ngIf="user()">
+    <a
+      mat-button
+      routerLink="/contacts"
+      class="flex items-center space-x-2 hover:bg-indigo-700 p-1 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
+    >
+      <mat-icon class="text-xs">list_alt</mat-icon>
+      <span class="font-medium text-xs tracking-wide">Contactos</span>
+    </a>
+
+    <span class="flex-grow"></span>
+
+    <a
+      mat-button
+      (click)="onNewClick()"
+      class="flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white p-1 rounded-full transition-all duration-300 ease-in-out"
+    >
+      <mat-icon class="text-xs">add_box</mat-icon>
+      <span class="font-medium text-xs tracking-wide">Nuevo</span>
+    </a>
+
+    <!-- Botón "Mi Perfil" con routerLink -->
+    <a
+      mat-button
+      routerLink="/profile"
+      class="flex items-center space-x-2 hover:bg-indigo-700 text-white px-3 py-1 rounded-full transition-all duration-300 ease-in-out"
+    >
+      <mat-icon class="text-xs">account_circle</mat-icon>
+      <span class="font-medium text-xs tracking-wide">Mi perfil</span>
+    </a>
+
+    <!-- Botón "Cerrar sesión" -->
+    <button
+      (click)="logOut()"
+      class="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-full transition-all duration-300 ease-in-out"
+    >
+      <mat-icon class="text-xs">logout</mat-icon>
+      <span class="font-medium text-xs tracking-wide">Cerrar sesión</span>
+    </button>
+  </ng-container>
+
+  <ng-container *ngIf="!user()">
+    <span class="flex-grow"></span>
+
+    <a
+      mat-button
+      routerLink="/sign-up"
+      class="flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white p-1 rounded-full transition-all duration-300 ease-in-out"
+    >
+      <mat-icon class="text-xs">person_add</mat-icon>
+      <span class="font-medium text-xs tracking-wide">Regístrate</span>
+    </a>
+
+    <a
+      mat-button
+      routerLink="/sign-in"
+      class="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white p-1 rounded-full transition-all duration-300 ease-in-out"
+    >
+      <mat-icon class="text-xs">login</mat-icon>
+      <span class="font-medium text-xs tracking-wide">Inicia sesión</span>
+    </a>
+  </ng-container>
+</mat-toolbar>

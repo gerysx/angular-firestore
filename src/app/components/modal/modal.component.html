@@ -1,0 +1,30 @@
+<div mat-dialog-title>
+  <h1>Añadir Contacto</h1>
+</div>
+
+<form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content class="content">
+    <!-- Nombre input -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre</mat-label>
+      <input matInput type="text" formControlName="nombre" />
+    </mat-form-field>
+
+    <!-- Teléfono input -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Teléfono</mat-label>
+      <input matInput type="text" formControlName="telefono" />
+    </mat-form-field>
+
+    <!-- Email input -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="text" formControlName="email" />
+    </mat-form-field>
+  </div>
+
+  <div mat-dialog-actions class="action">
+    <button mat-raised-button [mat-dialog-close]="false" type="button">Cancelar</button>
+    <button [disabled]="!contactForm.valid" mat-raised-button color="primary" type="submit">{{getTitle()}}</button>
+  </div>
+</form>

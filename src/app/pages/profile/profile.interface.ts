@@ -1,0 +1,15 @@
+
+export type ColumnKeys<T> = Array<keyof T>;
+
+export interface Profile {
+    id: string,
+    nombre: string;
+    apellido: string;
+    cod_postal: number;
+    ciudad: string;
+    movil: number;
+    email: string;   
+    pais: string;
+
+    
+}

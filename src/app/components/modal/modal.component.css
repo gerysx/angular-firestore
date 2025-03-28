@@ -1,0 +1,23 @@
+/* Asegura que los mat-form-field ocupen todo el ancho disponible del modal, pero un poco menos del 100% */
+.full-width {
+    width: 90%; /* Ajustamos el ancho a un 90% */
+    margin: 0 auto; /* Centramos los inputs */
+  }
+  
+  /* Contenedor de los campos de formulario */
+  .content {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column; /* Alineamos los campos verticalmente */
+    gap: 20px; /* Añadimos espacio entre los campos */
+    align-items: center; /* Centra los campos dentro del contenedor */
+  }
+  
+  /* Estilo para las acciones */
+  .action {
+    padding: 0 25px 20px;
+    button {
+      flex: 1; /* Para que los botones ocupen todo el ancho disponible */
+    }
+  }
+  

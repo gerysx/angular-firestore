@@ -1,0 +1,25 @@
+ /* Transición suave para la imagen de la slide */
+ .transition-all {
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Sombra más suave para el carrusel */
+.shadow-lg {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover para los controles del carrusel */
+button:hover {
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+/* Asegurar que el contenido del texto tenga bordes redondeados */
+.rounded-3xl {
+  border-radius: 1.5rem; /* Bordes más redondeados y consistentes */
+}
+
+/* Mat-toolbar con solo borde inferior */
+mat-toolbar {
+  border-bottom: 2px solid #333; /* Borde inferior */
+  border-top: none; /* Sin borde superior */
+}
