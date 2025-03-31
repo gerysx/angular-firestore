@@ -5,9 +5,9 @@ import { HomeComponent } from './pages/home/home.component';
 import authRoutes from './pages/auth/features/auth.routes';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },  
+  { path: '', redirectTo: 'home', pathMatch: 'full' },  // Redirige a 'home' en lugar de '/'
   { path: 'home', component: HomeComponent },  
-  { path: 'contacts', loadChildren: () => import('./features/contacts/contacts.routes') },
+  { path: 'contacts', loadChildren: () => import('./features/contacts/contacts.routes').then(m => m.default) },
 
   // Agrega las rutas de autenticación aquí
   ...authRoutes,  
@@ -15,8 +15,9 @@ export const routes: Routes = [
   // Cargar ProfileComponent como Standalone
   { 
     path: 'profile', 
-    loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent) 
+    loadComponent: () => import('./components/profile-settings/profile-settings.component')
+      .then(m => m.ProfileSettingsComponent) 
   },
 
-  { path: '**', redirectTo: '/' }
+  { path: '**', redirectTo: 'home' }  // Redirige a 'home' si no encuentra la ruta
 ];

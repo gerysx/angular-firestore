@@ -6,8 +6,9 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from 'src/app/pages/auth/data-access/auth.service';
 import { User } from '@angular/fire/auth';
+import { MatTooltip } from '@angular/material/tooltip';
 
-const MATERIAL_MODULES = [MatToolbarModule, MatIconModule, MatButtonModule];
+const MATERIAL_MODULES = [MatToolbarModule, MatIconModule, MatButtonModule, MatTooltip];
 
 @Component({
   selector: 'app-toolbar',
