@@ -1,63 +1,97 @@
-<div class="container rounded bg-white mt-5 mb-5">
+<div class="container mx-auto rounded bg-white mt-5 mb-5 p-5">
   <div class="flex flex-wrap">
     <!-- Columna izquierda (Foto y Nombre) -->
-    <div class="w-full sm:w-1/4 border-r">
+    <div class="w-full sm:w-1/4 border-b sm:border-b-0 sm:border-r mb-5 sm:mb-0">
       <div class="flex flex-col items-center text-center p-3 py-5">
         <img
           class="rounded-full mt-5"
           width="150px"
           src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+          alt="Usuario"
         />
-        <span class="font-bold text-lg">{{ profile?.nombre || 'Usuario' }}</span>
+        <span class="font-bold text-lg">{{ profile?.nombre || "Usuario" }}</span>
       </div>
     </div>
 
     <!-- Columna derecha (Formulario) -->
-    <div class="w-full sm:w-2/5 border-r p-4">
-      <h4 class="text-right text-xl font-semibold">Ajustes de perfil</h4>
+    <div class="w-full sm:w-3/4 p-4">
+      <h4 class="text-right text-xl font-semibold mb-5">Ajustes de perfil</h4>
 
       <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
             <label class="block text-sm font-semibold">Nombre</label>
-            <input formControlName="nombre" type="text" class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+            <input
+              formControlName="nombre"
+              type="text"
+              class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
+            />
           </div>
           <div>
             <label class="block text-sm font-semibold">Apellido</label>
-            <input formControlName="apellido" type="text" class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+            <input
+              formControlName="apellido"
+              type="text"
+              class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
+            />
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
             <label class="block text-sm font-semibold">Móvil</label>
-            <input formControlName="movil" type="text" class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+            <input
+              formControlName="movil"
+              type="text"
+              class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
+            />
           </div>
           <div>
             <label class="block text-sm font-semibold">Código Postal</label>
-            <input formControlName="cod_postal" type="text" class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+            <input
+              formControlName="cod_postal"
+              type="text"
+              class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
+            />
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
             <label class="block text-sm font-semibold">Ciudad</label>
-            <input formControlName="ciudad" type="text" class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+            <input
+              formControlName="ciudad"
+              type="text"
+              class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
+            />
           </div>
           <div>
             <label class="block text-sm font-semibold">Email</label>
-            <input formControlName="email" type="email" class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+            <input
+              formControlName="email"
+              type="email"
+              class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
+            />
           </div>
         </div>
 
-        <div>
+        <div class="mb-4">
           <label class="block text-sm font-semibold">País</label>
-          <input formControlName="pais" type="text" class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+          <input
+            formControlName="pais"
+            type="text"
+            class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
+          />
         </div>
 
         <div class="mt-5 text-center">
-          <button class="w-full py-2 px-4 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500" type="submit">
-            {{ profile ? 'Actualizar perfil' : 'Guardar perfil' }}
+          <!-- Botón que cambia según si es nuevo perfil o no -->
+          <button
+            class="w-full py-2 px-4 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+            type="submit"
+            [routerLink]="'/contacts'"
+          >
+            {{ isNewProfile ? "Guardar cambios" : "Actualizar perfil" }}
           </button>
         </div>
       </form>

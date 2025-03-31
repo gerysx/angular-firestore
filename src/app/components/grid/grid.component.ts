@@ -1,7 +1,7 @@
-import { Component, effect, inject, input, OnInit, signal, viewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table'; // Importa MatTableDataSource
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { FilterComponent } from "./filter/filter.component";
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,68 +10,73 @@ import { ContactService } from '@features/contacts/contact.service';
 import { ModalService } from '@components/modal/modal.service';
 import { ModalComponent } from '@components/modal/modal.component';
 import { SnackBarService } from '@shared/services/snack-bar.service';
+import { Contact } from '@features/contacts/contact.interface';
+import { signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-
-const MATERIAL_MODULES =[MatTableModule, MatSortModule, MatPaginatorModule, FilterComponent, MatButtonModule, MatIconModule ];
+const MATERIAL_MODULES = [MatTableModule, MatSortModule, MatPaginatorModule, FilterComponent, MatButtonModule, MatIconModule];
 
 @Component({
   selector: 'app-grid',
   standalone: true,
-  imports: [MATERIAL_MODULES],
+  imports: [MATERIAL_MODULES, CommonModule],
   templateUrl: './grid.component.html',
-  styleUrl: './grid.component.css'
+  styleUrls: ['./grid.component.css']
 })
-export class GridComponent<T>  implements OnInit{
- 
+export class GridComponent implements OnInit {
+  @Input() displayedColumns!: string[];
+  @Input() data!: Contact[];  // ✅ Asegura que 'data' esté definido
+  @Input() sortableColumns: string[] = [];  // ✅ Agregar @Input() para sortableColumns
 
-  displayedColumns = input.required<string[]>();
-  data = input.required<T[]>();
-  sortableColumns=input<string[]>([]);
+  dataSource = new MatTableDataSource<Contact>();
 
-  dataSource = new MatTableDataSource<T>();
-  valueToFilter = signal('');
-  private readonly _sort = viewChild.required<MatSort>(MatSort);
-  private readonly _paginator = viewChild.required<MatPaginator>(MatPaginator);
+  valueToFilter = signal('');  // Definir 'valueToFilter' como un signal
+
+  @ViewChild(MatSort) private _sort!: MatSort;
+  @ViewChild(MatPaginator) private _paginator!: MatPaginator;
+  
   private readonly _contactSvc = inject(ContactService);
   private readonly _modalSvc = inject(ModalService);
   private readonly _snackBar = inject(SnackBarService);
 
-  constructor(){
-    effect(()=>{
-      if ( this.valueToFilter()){
-        this.dataSource.filter= this.valueToFilter();
-      } else {
-        this.dataSource.filter= '';
-      }
-
-      if(this.data()){
-        this.dataSource.data = this.data();
-      }
-
-    }, {allowSignalWrites: true})
-  }
-  
   ngOnInit(): void {
-    this.dataSource.data=this.data();
-    this.dataSource.sort=this._sort();
-    this.dataSource.paginator=this._paginator();
+    this._loadContacts();
   }
 
-  openEditForm(data: T) :void {
-    this._modalSvc.openModal<ModalComponent, T>(ModalComponent, data, true);
-
+  private _loadContacts(): void {
+    this._contactSvc.getAllContacts().subscribe(contacts => {
+      this.dataSource.data = contacts;
+      this.dataSource.sort = this._sort;
+      this.dataSource.paginator = this._paginator;
+    });
   }
 
-  selectedRow( data : T) : void {
-    this.openEditForm(data);
+  openEditForm(contact: Contact): void {
+    this._modalSvc.openModal<ModalComponent, Contact>(ModalComponent, contact, true);
   }
 
-  deleteContact(id:string): void {
+  selectedRow(contact: Contact): void {
+    this.openEditForm(contact);
+  }
+
+  async deleteContact(id: string): Promise<void> {
     const confirmation = confirm(APP_CONSTANTS.MESSAGES.CONFIRMATION_PROMPT);
-    if(confirmation){
-      this._contactSvc.deleteContact(id);
-      this._snackBar.showSnackBar(APP_CONSTANTS.MESSAGES.CONTACT_DELETED);
+    if (confirmation) {
+      try {
+        await this._contactSvc.deleteContact(id);
+        this._snackBar.showSnackBar(APP_CONSTANTS.MESSAGES.CONTACT_DELETED);
+        this._loadContacts(); // Recargar lista tras eliminación
+      } catch (error) {
+        console.error("Error al eliminar contacto:", error);
+        this._snackBar.showSnackBar("Error al eliminar el contacto");
+      }
     }
   }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
+  }
+
   
 }

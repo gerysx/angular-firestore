@@ -1,31 +1,59 @@
 import { Injectable, inject } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, User, onAuthStateChanged } from '@angular/fire/auth';
+import { 
+  Auth, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signInWithPopup, 
+  GoogleAuthProvider, 
+  signOut, 
+  User, 
+  onAuthStateChanged 
+} from '@angular/fire/auth';
+
 import { signal } from '@angular/core';
+import { 
+  doc, 
+  Firestore, 
+  setDoc, 
+  getDoc, 
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private _auth = inject(Auth);
+  private _firestore = inject(Firestore);
 
-  // Usamos signal() para manejar el estado del usuario
+  // Signal para manejar el estado del usuario
   user = signal<User | null>(null);
 
   constructor() {
-    onAuthStateChanged(this._auth, (user) => {
+    onAuthStateChanged(this._auth, async (user) => {
       this.user.set(user);  // Actualizamos la señal
+      if (user) {
+        await this.ensureUserDocumentExists(user.uid);
+      }
     });
   }
 
   async signUp(user: { email: string; password: string }) {
     const userCredential = await createUserWithEmailAndPassword(this._auth, user.email, user.password);
     this.user.set(userCredential.user);  // Actualizamos la señal
+
+    // Crear documento si no existe
+    await this.ensureUserDocumentExists(userCredential.user.uid);
+
     return userCredential;
   }
 
   async signIn(user: { email: string; password: string }) {
     const userCredential = await signInWithEmailAndPassword(this._auth, user.email, user.password);
     this.user.set(userCredential.user);  // Actualizamos la señal
+
+    // Asegurar que el documento del usuario existe
+    await this.ensureUserDocumentExists(userCredential.user.uid);
+
     return userCredential;
   }
 
@@ -33,6 +61,10 @@ export class AuthService {
     const provider = new GoogleAuthProvider();
     const userCredential = await signInWithPopup(this._auth, provider);
     this.user.set(userCredential.user);  // Actualizamos la señal
+
+    // Asegurar que el documento del usuario existe
+    await this.ensureUserDocumentExists(userCredential.user.uid);
+
     return userCredential;
   }
 
@@ -41,8 +73,31 @@ export class AuthService {
     this.user.set(null);  // Limpiamos la señal
   }
 
-  // Exposición de la señal de usuario
   getUser() {
     return this.user();  // Accedemos al valor actual de la señal
+  }
+
+  getUserUid(): string | null {
+    return this.user()?.uid ?? null;  // Retorna el UID o null si no está disponible
+  }
+
+  /**
+   * Asegura que el documento del usuario existe en Firestore.
+   * Si no existe, lo crea automáticamente con el UID como ID.
+   */
+  async ensureUserDocumentExists(uid: string) {
+    const userRef = doc(this._firestore, 'users', uid);
+    
+    try {
+      const docSnap = await getDoc(userRef);
+
+      if (!docSnap.exists()) {
+        // Si el documento no existe, lo creamos vacío
+        await setDoc(userRef, {});
+        console.log(`Documento creado para el usuario con ID: ${uid}`);
+      }
+    } catch (error) {
+      console.error('Error al verificar o crear el documento:', error);
+    }
   }
 }

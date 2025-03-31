@@ -4,27 +4,30 @@
 
 <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
   <div mat-dialog-content class="content">
-    <!-- Nombre input -->
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Nombre</mat-label>
-      <input matInput type="text" formControlName="nombre" />
-    </mat-form-field>
+    <!-- Contenedor para los campos de formulario -->
+    <div class="flex flex-col gap-5 w-full">
+      <!-- Nombre input -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Nombre</mat-label>
+        <input matInput type="text" formControlName="nombre" class="p-2 border-2 border-gray-300 rounded-md"/>
+      </mat-form-field>
 
-    <!-- Teléfono input -->
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Teléfono</mat-label>
-      <input matInput type="text" formControlName="telefono" />
-    </mat-form-field>
+      <!-- Teléfono input -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Teléfono</mat-label>
+        <input matInput type="text" formControlName="telefono" class="p-2 border-2 border-gray-300 rounded-md"/>
+      </mat-form-field>
 
-    <!-- Email input -->
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Email</mat-label>
-      <input matInput type="text" formControlName="email" />
-    </mat-form-field>
+      <!-- Email input -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Email</mat-label>
+        <input matInput type="text" formControlName="email" class="p-2 border-2 border-gray-300 rounded-md"/>
+      </mat-form-field>
+    </div>
   </div>
 
   <div mat-dialog-actions class="action">
-    <button mat-raised-button [mat-dialog-close]="false" type="button">Cancelar</button>
-    <button [disabled]="!contactForm.valid" mat-raised-button color="primary" type="submit">{{getTitle()}}</button>
+    <button mat-raised-button [mat-dialog-close]="false" type="button" class="px-4 py-2 bg-gray-300 text-black rounded-md">Cancelar</button>
+    <button [disabled]="!contactForm.valid" mat-raised-button color="primary" type="submit" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">{{ getTitle() }}</button>
   </div>
 </form>
