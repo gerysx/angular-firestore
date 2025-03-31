@@ -3,12 +3,13 @@ import { SnackBarService } from "@shared/services/snack-bar.service";
 import { Profile } from "./profile.interface";
 import { Component, OnInit } from "@angular/core";
 import { ProfileService } from "./profile.service";
-import { RouterLink } from "@angular/router";
+import { Router } from "@angular/router";  // Importamos Router para redirigir después del submit
+import { Timestamp } from "@angular/fire/firestore";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
@@ -20,7 +21,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _profileService: ProfileService,
-    private _snackBar: SnackBarService
+    private _snackBar: SnackBarService,
+    private _router: Router  // Agregamos el Router para redirigir después de guardar
   ) {}
 
   ngOnInit(): void {
@@ -63,20 +65,27 @@ export class ProfileComponent implements OnInit {
     }
 
     const profileData: Profile = {
-      id: this.profileForm.value.email,  // Usamos el email como ID único
       ...this.profileForm.value,
-      created: this.isNewProfile ? new Date() : this.profile!.created,  // Si es nuevo, asignamos la fecha actual
-      updated: new Date()  // Siempre actualizamos la fecha de modificación
+      created: this.isNewProfile ? Timestamp.now() : this.profile!.created,  // Si es nuevo, asignamos la fecha actual
+      updated: Timestamp.now()  // Siempre actualizamos la fecha de modificación
     };
 
-    if (this.isNewProfile) {
-      // Si es un perfil nuevo, lo creamos
-      await this._profileService.createProfile(profileData);
-      this._snackBar.showSnackBar('Perfil creado correctamente');
-    } else {
-      // Si el perfil ya existe, lo actualizamos
-      await this._profileService.updateProfile(profileData);
-      this._snackBar.showSnackBar('Perfil actualizado correctamente');
+    try {
+      if (this.isNewProfile) {
+        // Si es un perfil nuevo, lo creamos
+        await this._profileService.createProfile(profileData);
+        this._snackBar.showSnackBar('Perfil creado correctamente');
+      } else {
+        // Si el perfil ya existe, lo actualizamos
+        await this._profileService.updateProfile(profileData);
+        this._snackBar.showSnackBar('Perfil actualizado correctamente');
+      }
+      
+      // Redirigir a la página de contactos después de crear o actualizar
+      this._router.navigate(['/contacts']);
+    } catch (error) {
+      console.error('Error al crear o actualizar el perfil', error);
+      this._snackBar.showSnackBar('Error al crear o actualizar el perfil.');
     }
   }
 }

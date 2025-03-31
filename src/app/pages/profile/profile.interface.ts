@@ -3,7 +3,6 @@ import { Timestamp } from "firebase/firestore";
 export type ColumnKeys<T> = Array<keyof T>;
 
 export interface Profile {
-    id: string,
     nombre: string;
     apellido: string;
     cod_postal: number;
