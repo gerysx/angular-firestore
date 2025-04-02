@@ -6,18 +6,41 @@ import { ProfileService } from "./profile.service";
 import { Router } from "@angular/router";  // Importamos Router para redirigir después del submit
 import { Timestamp } from "@angular/fire/firestore";
 
+/**
+ * Componente para mostrar y gestionar el perfil del usuario.
+ * Permite crear o actualizar el perfil dependiendo si el usuario tiene uno existente.
+ */
 @Component({
-  selector: 'app-profile',
-  standalone: true,
-  imports: [ReactiveFormsModule],
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  selector: 'app-profile',  // Selector para el componente en el HTML
+  standalone: true,  // Este componente es independiente
+  imports: [ReactiveFormsModule],  // Importamos ReactiveFormsModule para trabajar con formularios reactivos
+  templateUrl: './profile.component.html',  // Ruta del archivo HTML
+  styleUrls: ['./profile.component.css']  // Ruta del archivo CSS
 })
 export class ProfileComponent implements OnInit {
+  /**
+   * Formulario reactivo que gestiona los datos del perfil.
+   */
   profileForm!: FormGroup;
-  profile: Profile | null = null;
-  isNewProfile: boolean = false;  // Variable para saber si el perfil es nuevo o no
 
+  /**
+   * Contiene los datos del perfil del usuario.
+   */
+  profile: Profile | null = null;
+
+  /**
+   * Indica si el perfil es nuevo (cuando no existe en la base de datos).
+   */
+  isNewProfile: boolean = false;
+
+  /**
+   * Constructor del componente que inyecta los servicios necesarios.
+   * 
+   * @param _fb Servicio FormBuilder para crear el formulario reactivo
+   * @param _profileService Servicio ProfileService para interactuar con los datos del perfil
+   * @param _snackBar Servicio SnackBarService para mostrar mensajes emergentes
+   * @param _router Servicio Router para redirigir a otras páginas
+   */
   constructor(
     private _fb: FormBuilder,
     private _profileService: ProfileService,
@@ -25,12 +48,20 @@ export class ProfileComponent implements OnInit {
     private _router: Router  // Agregamos el Router para redirigir después de guardar
   ) {}
 
+  /**
+   * Método de ciclo de vida que se ejecuta al inicializar el componente.
+   * Carga el perfil existente si está disponible y construye el formulario reactivo.
+   */
   ngOnInit(): void {
     this._loadProfile();  // Cargar el perfil al iniciar el componente
     this._buildForm();  // Construir el formulario
   }
 
-  // Método para cargar el perfil desde el servicio
+  /**
+   * Carga el perfil del usuario desde el servicio.
+   * Si el perfil existe, se llena el formulario con los datos.
+   * Si no existe, se marca como nuevo.
+   */
   private async _loadProfile() {
     this.profile = await this._profileService.getProfile();  // Obtenemos el perfil del servicio
 
@@ -44,20 +75,26 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  // Método para construir el formulario reactivo
+  /**
+   * Construye el formulario reactivo con las validaciones necesarias para cada campo.
+   */
   private _buildForm(): void {
     this.profileForm = this._fb.group({
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
-      movil: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],  // Aseguramos que sea un número
-      cod_postal: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],  // Aseguramos que sea un número
-      ciudad: ['', Validators.required],
+      nombre: ['', Validators.required],  // Nombre es obligatorio
+      apellido: ['', Validators.required],  // Apellido es obligatorio
+      movil: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],  // Teléfono debe ser un número
+      cod_postal: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],  // Código postal debe ser un número
+      ciudad: ['', Validators.required],  // Ciudad es obligatoria
       email: ['', [Validators.required, Validators.email]],  // Validación de email
-      pais: ['', Validators.required]
+      pais: ['', Validators.required]  // País es obligatorio
     });
   }
 
-  // Método para manejar el submit del formulario
+  /**
+   * Método que maneja el envío del formulario.
+   * Si el formulario es válido, se guarda el perfil. 
+   * Si el perfil es nuevo, se crea, si ya existe, se actualiza.
+   */
   async onSubmit() {
     if (this.profileForm.invalid) {
       this._snackBar.showSnackBar('Por favor, completa todos los campos.');
@@ -65,7 +102,7 @@ export class ProfileComponent implements OnInit {
     }
 
     const profileData: Profile = {
-      ...this.profileForm.value,
+      ...this.profileForm.value,  // Obtenemos los valores del formulario
       created: this.isNewProfile ? Timestamp.now() : this.profile!.created,  // Si es nuevo, asignamos la fecha actual
       updated: Timestamp.now()  // Siempre actualizamos la fecha de modificación
     };

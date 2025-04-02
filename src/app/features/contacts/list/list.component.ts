@@ -28,34 +28,73 @@ const ELEMENT_DATA: any[] = [
   {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
 ];
 
+/**
+ * Componente que lista todos los contactos en una tabla con opciones de filtrado y ordenación.
+ * 
+ * Este componente obtiene los datos de los contactos mediante el servicio `ContactService` y los muestra en un componente de tabla (`GridComponent`).
+ */
 @Component({
-  selector: 'app-list',
-  standalone: true,
-  imports: [GridComponent],
+  selector: 'app-list', // Selector para usar este componente en otras plantillas
+  standalone: true, // Componente autónomo que no depende de un módulo
+  imports: [GridComponent], // Importa el componente de la tabla para mostrar los contactos
   template: `
   <section>
-  
+      <!-- Componente de tabla que recibe columnas, datos y columnas ordenables como parámetros -->
       <app-grid [displayedColumns]="displayedColumns" [data]="contacts()" [sortableColumns]="sortables"/>
   </section>
   `,
 })
-export class ListComponent implements OnInit{
+export class ListComponent implements OnInit {
+  /**
+   * Signal que contiene la lista de contactos.
+   * Se utiliza para almacenar los contactos obtenidos y actualizar la vista de manera reactiva.
+   */
   contacts = signal<Contact[]>([]);
-    ngOnInit(): void {
-      this.getAllContacts();
-    }
-    displayedColumns: ColumnKeys<Contact> = ['id', 'nombre', 'telefono', 'email', 'action'];
-    sortables: ColumnKeys<Contact> = ['id', 'nombre', 'telefono', 'email'];
 
-    private readonly _contactSvc = inject(ContactService);
-    private readonly _destroyRef = inject(DestroyRef);
+  /**
+   * Lista de columnas a mostrar en la tabla.
+   * Las columnas incluyen el identificador, nombre, teléfono, correo electrónico y una columna de acción.
+   */
+  displayedColumns: ColumnKeys<Contact> = ['id', 'nombre', 'telefono', 'email', 'action'];
 
-    getAllContacts(){
-      this._contactSvc.getAllContacts()
+  /**
+   * Columnas que son ordenables en la tabla.
+   * Se pueden especificar aquí las columnas que el usuario podrá ordenar.
+   */
+  sortables: ColumnKeys<Contact> = ['id', 'nombre', 'telefono', 'email'];
+
+  /**
+   * Servicio para obtener y manipular los datos de los contactos.
+   */
+  private readonly _contactSvc = inject(ContactService);
+
+  /**
+   * Referencia para manejar el ciclo de vida de destrucción del componente.
+   */
+  private readonly _destroyRef = inject(DestroyRef);
+
+  /**
+   * Método llamado al inicializar el componente.
+   * 
+   * Obtiene todos los contactos llamando a la función `getAllContacts` para cargarlos desde el servicio.
+   */
+  ngOnInit(): void {
+    this.getAllContacts();
+  }
+
+  /**
+   * Obtiene todos los contactos del servicio `ContactService` y los asigna a la `signal` de contactos.
+   * 
+   * El método también maneja la cancelación de la suscripción cuando el componente es destruido utilizando `takeUntilDestroyed`.
+   */
+  getAllContacts() {
+    this._contactSvc.getAllContacts()
       .pipe(
+        // Utiliza 'takeUntilDestroyed' para cancelar la suscripción cuando el componente se destruye
         takeUntilDestroyed(this._destroyRef),
-        tap((contacts: Contact [])=> this.contacts.set(contacts))
+        // Al recibir los contactos, se asignan a la propiedad 'contacts' reactiva
+        tap((contacts: Contact[]) => this.contacts.set(contacts))
       )
-      .subscribe()
-    }
+      .subscribe();
+  }
 }

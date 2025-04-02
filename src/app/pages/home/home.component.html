@@ -1,24 +1,24 @@
 <div class="relative w-full" style="height: calc(100vh - 64px);">
   <!-- Carousel wrapper -->
-  <div class="relative w-full h-full overflow-hidden rounded-b-3xl shadow-lg border-b-4 border-gray-800">
+  <div class="relative w-full h-full overflow-hidden shadow-lg border-b-0 rounded-b-none">
     <!-- Slide 1 -->
     <div
-      class="w-full h-full transition-all duration-700 ease-in-out transform"
+      class="absolute inset-0 w-full h-full transition-all duration-700 ease-in-out transform flex items-center justify-center"
       *ngFor="let slide of slides; let i = index"
       [ngClass]="{
         'translate-x-0': currentIndex === i,
         'translate-x-full': currentIndex !== i
       }"
-      class="absolute inset-0 flex items-center justify-center"
     >
-      <!-- Aquí usas directamente la propiedad image -->
+      <!-- Imagen del slide -->
       <img
         [src]="slide.image"
         alt="Slide {{ i + 1 }}"
-        class="object-cover w-full h-full rounded-b-3xl"
+        class="object-cover w-full h-full rounded-b-none"
       />
+      <!-- Texto del slide -->
       <div
-        class="absolute top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center text-white text-2xl font-semibold rounded-b-3xl"
+        class="absolute top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center text-white text-2xl font-semibold rounded-b-none transition-all duration-500 ease-in-out"
       >
         {{ slide.title }}
       </div>
@@ -26,6 +26,7 @@
   </div>
 
   <!-- Carousel Controls -->
+  <!-- Botón para ir al slide anterior -->
   <button
     (click)="prevSlide()"
     class="absolute left-5 top-1/2 transform -translate-y-1/2 bg-white/50 hover:bg-white text-black p-3 rounded-full transition-all duration-300 ease-in-out shadow-lg focus:outline-none"
@@ -46,6 +47,7 @@
     </svg>
   </button>
 
+  <!-- Botón para ir al siguiente slide -->
   <button
     (click)="nextSlide()"
     class="absolute right-5 top-1/2 transform -translate-y-1/2 bg-white/50 hover:bg-white text-black p-3 rounded-full transition-all duration-300 ease-in-out shadow-lg focus:outline-none"

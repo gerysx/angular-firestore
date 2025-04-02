@@ -1,33 +1,46 @@
 <div mat-dialog-title>
-  <h1>Añadir Contacto</h1>
+  <h1 class="text-2xl font-semibold text-gray-800">Añadir Contacto</h1>
 </div>
 
-<form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
-  <div mat-dialog-content class="content">
-    <!-- Contenedor para los campos de formulario -->
-    <div class="flex flex-col gap-5 w-full">
-      <!-- Nombre input -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Nombre</mat-label>
-        <input matInput type="text" formControlName="nombre" class="p-2 border-2 border-gray-300 rounded-md"/>
+<form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="p-6">
+  <div mat-dialog-content class="w-full">
+    <div class="space-y-6"> <!-- Añadimos más espacio entre campos -->
+
+      <!-- Nombre -->
+      <mat-form-field class="w-full block">
+        <mat-label class="text-gray-700">Nombre</mat-label>
+        <input matInput type="text" formControlName="nombre" 
+               class="p-4 border-2 border-gray-300 rounded-lg transition-all duration-300 focus:border-blue-500  focus:ring-blue-500 shadow-md focus:shadow-xl placeholder-gray-400 w-full" />
+        <mat-error *ngIf="isInvalid('nombre')" class="text-red-500 text-sm mt-1">El nombre es obligatorio.</mat-error>
       </mat-form-field>
 
-      <!-- Teléfono input -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Teléfono</mat-label>
-        <input matInput type="text" formControlName="telefono" class="p-2 border-2 border-gray-300 rounded-md"/>
+      <!-- Teléfono -->
+      <mat-form-field class="w-full block">
+        <mat-label class="text-gray-700">Teléfono</mat-label>
+        <input matInput type="text" formControlName="telefono" 
+               class="p-4 border-2 border-gray-300 rounded-lg transition-all duration-300 focus:border-blue-500  focus:ring-blue-500 shadow-md focus:shadow-xl placeholder-gray-400 w-full" />
+        <mat-error *ngIf="isInvalid('telefono')" class="text-red-500 text-sm mt-1">El teléfono es obligatorio.</mat-error>
       </mat-form-field>
 
-      <!-- Email input -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>Email</mat-label>
-        <input matInput type="text" formControlName="email" class="p-2 border-2 border-gray-300 rounded-md"/>
+      <!-- Email -->
+      <mat-form-field class="w-full block">
+        <mat-label class="text-gray-700">Email</mat-label>
+        <input matInput type="email" formControlName="email" 
+               class="p-4 border-2 border-gray-300 rounded-lg transition-all duration-300 focus:border-blue-500  focus:ring-blue-500 shadow-md focus:shadow-xl placeholder-gray-400 w-full" />
+        <mat-error *ngIf="isInvalid('email')" class="text-red-500 text-sm mt-1">Ingresa un email válido.</mat-error>
       </mat-form-field>
+
     </div>
   </div>
 
-  <div mat-dialog-actions class="action">
-    <button mat-raised-button [mat-dialog-close]="false" type="button" class="px-4 py-2 bg-gray-300 text-black rounded-md">Cancelar</button>
-    <button [disabled]="!contactForm.valid" mat-raised-button color="primary" type="submit" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">{{ getTitle() }}</button>
+  <div mat-dialog-actions class="flex justify-end gap-6 mt-6">
+    <button mat-raised-button [mat-dialog-close]="false" type="button"
+            class="px-6 py-3 bg-gray-300 text-black rounded-lg hover:bg-gray-400 transition-colors">
+      Cancelar
+    </button>
+    <button mat-raised-button color="primary" type="submit"
+            class="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+      {{ getTitle() }}
+    </button>
   </div>
 </form>
