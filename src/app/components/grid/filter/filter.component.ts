@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
@@ -18,9 +18,9 @@ const MATERIAL_MODULES = [MatLabel, MatFormField, MatInput, FormsModule];
   standalone: true, // Este componente es autónomo y no necesita ser parte de un módulo
   imports: [MATERIAL_MODULES], // Módulos de Angular Material necesarios para la interfaz
   template: `
-    <mat-form-field>
-      <mat-label>{{label()}}</mat-label> <!-- Etiqueta dinámica que muestra el texto del filtro -->
-      <input matInput type="text" [(ngModel)]="filter" [placeholder]="placeholder()"> <!-- Campo de texto para ingresar el filtro -->
+   <mat-form-field>
+      <mat-label>{{ label }}</mat-label>
+      <input matInput type="text" [(ngModel)]="filter" (ngModelChange)="onFilterChange()" [placeholder]="placeholder" />
     </mat-form-field>
   `,
   styles: `
@@ -40,25 +40,18 @@ const MATERIAL_MODULES = [MatLabel, MatFormField, MatInput, FormsModule];
       width: 100%; /* Garantiza que el filtro ocupe todo el espacio disponible */
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush, // Estrategia de detección de cambios para optimizar el rendimiento
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterComponent {
-  
-  /** 
-   * Valor del filtro ingresado por el usuario.
-   * Se enlaza bidireccionalmente con el campo de texto en la plantilla.
-   */
-  filter = model('');
 
-  /** 
-   * Etiqueta del filtro. Devuelve el texto para mostrar como la etiqueta.
-   * Por defecto, se establece como 'Filtro'.
-   */
-  label = input<string>('Filtro');
+  @Input() filter: string = '';  // Definir como @Input()
+  @Input() label: string = 'Filtro';
+  @Input() placeholder: string = 'Ej. nombre';
 
-  /** 
-   * Texto del placeholder para el campo de entrada. 
-   * Por defecto, se establece como 'Ej. nombre'.
-   */
-  placeholder = input<string>('Ej. nombre');
+  @Output() filterChange = new EventEmitter<string>();
+
+  onFilterChange() {
+    this.filterChange.emit(this.filter);  // Emitir el valor del filtro
+  }
+
 }

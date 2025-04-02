@@ -1,19 +1,22 @@
 <section class="mt-1">
+  <!-- Componente de Filtro -->
   <app-filter
     [label]="'Filtro...'"
     [placeholder]="'Buscar...'"
-    [(filter)]="valueToFilter"
-  />
+    [(filter)]="filter"  
+    (filterChange)="applyFilter()"  
+  ></app-filter>  
+  
   <div class="mat-elevation-z8">
+    <!-- Tabla de Contactos -->
     <table mat-table matSort [dataSource]="dataSource">
-      <!-- Definir columnas -->
+      <!-- Definición de columnas -->
       <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</th>
-        
         <td mat-cell *matCellDef="let element">
-          {{element[column]}}
+          {{ element[column] }}
 
-          <!-- Agregar botones de editar y eliminar -->
+          <!-- Botones de edición y eliminación -->
           <ng-container *ngIf="column === 'action'">
             <button mat-icon-button color="primary" (click)="openEditForm(element)">
               <mat-icon>edit</mat-icon>
@@ -27,7 +30,6 @@
 
       <!-- Fila de encabezado -->
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-
       <!-- Fila de datos -->
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
