@@ -1,0 +1,20 @@
+<!-- Contenedor del filtro y botón -->
+<div class="space-y-4">
+    <!-- Campo de filtro -->
+    <mat-form-field class="w-full">
+      <mat-label>{{ label }}</mat-label>
+      <input matInput type="text" [(ngModel)]="filter" (ngModelChange)="onFilterChange()" [placeholder]="placeholder" class="py-2 px-4 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"/>
+    </mat-form-field>
+  
+    <!-- Botón de agregar contacto debajo del filtro -->
+    <div class="flex justify-end">
+      <app-add-contact 
+        (onNewContactEvent)="onClickNewContact()" 
+        class="btn-icon"
+        matTooltip="Nuevo"
+      >
+        <mat-icon class="text-xs">add_box</mat-icon> <!-- Icono pequeño centrado -->
+      </app-add-contact>
+    </div>
+  </div>
+  

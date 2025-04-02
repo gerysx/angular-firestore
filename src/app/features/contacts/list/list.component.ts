@@ -55,7 +55,7 @@ export class ListComponent implements OnInit {
    * Lista de columnas a mostrar en la tabla.
    * Las columnas incluyen el identificador, nombre, teléfono, correo electrónico y una columna de acción.
    */
-  displayedColumns: ColumnKeys<Contact> = ['id', 'nombre', 'telefono', 'email', 'action'];
+  displayedColumns: ColumnKeys<Contact> = ['id', 'nombre', 'telefono', 'email', 'action', ];
 
   /**
    * Columnas que son ordenables en la tabla.

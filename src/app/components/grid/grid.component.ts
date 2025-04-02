@@ -12,6 +12,7 @@ import { ModalComponent } from '@components/modal/modal.component';
 import { SnackBarService } from '@shared/services/snack-bar.service';
 import { Contact } from '@features/contacts/contact.interface';
 import { CommonModule } from '@angular/common';
+import { AddContactComponent } from '@components/add-contact/add-contact.component';
 
 /**
  * Lista de módulos de Angular Material necesarios para la tabla y los filtros.

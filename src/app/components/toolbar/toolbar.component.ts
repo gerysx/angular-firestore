@@ -23,11 +23,7 @@ const MATERIAL_MODULES = [MatToolbarModule, MatIconModule, MatButtonModule, MatT
   styleUrls: ['./toolbar.component.css'], // Estilos asociados al componente
 })
 export class ToolbarComponent {
-  /**
-   * Evento de emisión cuando el usuario hace clic en "Nuevo contacto".
-   * Se utiliza para activar la creación de un nuevo contacto en la vista principal.
-   */
-  @Output() onNewContactEvent = new EventEmitter<void>();
+
 
   /**
    * Señal que representa al usuario autenticado.
@@ -69,11 +65,5 @@ export class ToolbarComponent {
     this.router.navigate(['/sign-in']); // Redirige a la página de inicio de sesión
   }
 
-  /**
-   * Emite el evento para crear un nuevo contacto.
-   * Este método se ejecuta cuando el usuario hace clic en el botón "Nuevo contacto".
-   */
-  onNewClick(): void {
-    this.onNewContactEvent.emit(); // Emite el evento para que el componente padre maneje la acción
-  }
+
 }
