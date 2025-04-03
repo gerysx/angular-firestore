@@ -54,6 +54,7 @@ export interface Profile {
      */
     pais: string;
 
+
     /**
      * Marca temporal de la creación del perfil.
      * Se asigna cuando se crea un perfil nuevo.

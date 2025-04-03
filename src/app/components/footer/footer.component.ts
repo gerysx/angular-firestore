@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatToolbar } from '@angular/material/toolbar';
 
 /**
  * Componente de pie de página.
@@ -9,7 +10,7 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [MatIcon, MatIconModule], // Importa los módulos necesarios para iconos de Material
+  imports: [MatIcon, MatIconModule, MatToolbar], // Importa los módulos necesarios para iconos de Material
   templateUrl: './footer.component.html', // Enlace al archivo HTML de la plantilla
   styleUrl: './footer.component.css', // Enlace al archivo de estilos CSS
 })

@@ -1,4 +1,4 @@
-<mat-toolbar
+<mat-toolbar 
   color="primary"
   class="bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-800 shadow-sm text-white px-4 py-1 flex items-center justify-between border-b border-gray-700 rounded-t-lg w-full z-50"
 >
@@ -12,6 +12,7 @@
     <mat-icon class="text-xs">home</mat-icon>
   </a>
 
+  <!-- Mostrar los elementos si el usuario está autenticado -->
   <ng-container *ngIf="user()">
     <a
       mat-button
@@ -24,35 +25,43 @@
 
     <span class="flex-grow"></span>
 
-  
-
     <!-- Botón "Mi Perfil" con routerLink -->
     <a
       mat-button
       routerLink="/profile"
-      class="flex items-center space-x-1 hover:bg-indigo-700 text-white px-3 py-1 rounded-full transition-all duration-300 ease-in-out"
+      class="flex items-center space-x-1 hover:bg-indigo-700 text-white px-3 py-1 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
       matTooltip="Mi perfil"
     >
       <mat-icon class="text-xs">account_circle</mat-icon>
     </a>
 
+    <!-- Botón de Dark Mode (Antes del de Cerrar sesión, transparente) -->
+    <button
+      (click)="toggleTheme()"
+      class="flex items-center space-x-1 bg-transparent hover:bg-gray-700 text-white px-3 py-1 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
+      matTooltip="Cambiar Tema"
+    >
+      <mat-icon class="text-xs">brightness_4</mat-icon>
+    </button>
+
     <!-- Botón "Cerrar sesión" -->
     <button
       (click)="logOut()"
-      class="flex items-center space-x-1 bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-full transition-all duration-300 ease-in-out"
+      class="flex items-center space-x-1 bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
       matTooltip="Cerrar sesión"
     >
       <mat-icon class="text-xs">logout</mat-icon>
     </button>
   </ng-container>
 
+  <!-- Mostrar los elementos si el usuario no está autenticado -->
   <ng-container *ngIf="!user()">
     <span class="flex-grow"></span>
 
     <a
       mat-button
       routerLink="/sign-up"
-      class="flex items-center space-x-1 bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition-all duration-300 ease-in-out"
+      class="flex items-center space-x-1 bg-green-600 hover:bg-green-700 text-white p-2 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
       matTooltip="Regístrate"
     >
       <mat-icon class="text-xs">person_add</mat-icon>
@@ -61,10 +70,19 @@
     <a
       mat-button
       routerLink="/sign-in"
-      class="flex items-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-all duration-300 ease-in-out"
+      class="flex items-center space-x-1 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
       matTooltip="Inicia sesión"
     >
       <mat-icon class="text-xs">login</mat-icon>
     </a>
+
+    <!-- Botón de Dark Mode (Antes del de Iniciar sesión, transparente) -->
+    <button
+      (click)="toggleTheme()"
+      class="flex items-center space-x-1 bg-transparent hover:bg-gray-700 text-white px-3 py-1 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
+      matTooltip="Cambiar Tema"
+    >
+      <mat-icon class="text-xs">brightness_4</mat-icon>
+    </button>
   </ng-container>
 </mat-toolbar>

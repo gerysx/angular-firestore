@@ -7,6 +7,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from 'src/app/pages/auth/data-access/auth.service';
 import { User } from '@angular/fire/auth';
 import { MatTooltip } from '@angular/material/tooltip';
+import { ThemeService } from 'src/app/app/theme.service';
 
 const MATERIAL_MODULES = [MatToolbarModule, MatIconModule, MatButtonModule, MatTooltip];
 
@@ -43,7 +44,9 @@ export class ToolbarComponent {
    * @param router - Instancia del servicio Router de Angular para navegación.
    * @param authService - Instancia del servicio de autenticación para gestionar el estado del usuario.
    */
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(private router: Router,
+     private authService: AuthService,
+    private themeService: ThemeService) {
     this.user = this.authService.user; // Asignación directa de la señal del usuario
   }
 
@@ -65,5 +68,9 @@ export class ToolbarComponent {
     this.router.navigate(['/sign-in']); // Redirige a la página de inicio de sesión
   }
 
+
+  toggleTheme() {
+    this.themeService.toggleTheme(); // Llamamos al método toggleTheme del servicio
+  }
 
 }

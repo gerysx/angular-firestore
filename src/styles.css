@@ -3,51 +3,132 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Aplicar el modo claro por defecto */
+body, html, footer, section {
+  @apply bg-white text-black;  /* Fondo blanco y texto negro para el modo claro */
+}
+
+/* Cuando la clase 'dark' está presente en el 'body', se activará el modo oscuro */
+body.dark, html.dark, footer.dark, section.dark {
+  @apply bg-gray-900 text-white;  /* Fondo oscuro y texto blanco */
+}
+
+/* Estilo para las pestañas de Angular Material */
+body.dark .mat-tab-label {
+  color: white !important; /* Texto blanco para las pestañas en modo oscuro */
+}
+
+body.dark .mat-tab-label-active {
+  color: #4caf50 !important; /* Pestaña activa en modo oscuro */
+}
+
+/* Estilo para la barra de herramientas y las tarjetas en modo oscuro */
+body.dark .mat-toolbar {
+  background-color: #1f2937 !important; /* Fondo más oscuro para la toolbar */
+  color: white !important; /* Texto blanco */
+}
+
+body.dark .mat-card {
+  background-color: #333 !important; /* Fondo oscuro para las cards */
+  color: white !important; /* Texto blanco */
+}
+
 /* Aseguramos que el body ocupe toda la altura */
 html, body, footer {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    margin: 0; /* Eliminar margen por defecto */
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 /* Ajuste del padding y altura del toolbar */
 mat-toolbar, footer {
-    padding-left: 16px; /* Ajuste del padding */
-    padding-right: 16px; /* Ajuste del padding */
-    height: 48px !important; /* Reducción de la altura */
-    display: flex;
-    align-items: center; /* Asegura que los elementos dentro estén alineados verticalmente */
-    justify-content: space-between; /* Distribuye el contenido del toolbar */
-}
-
-/* Tamaño de los iconos y texto 
-mat-icon {
-    font-size: 18px;   
-}*/
-
-span {
-    font-size: 12px; /* Tamaño de texto más pequeño */
-}
-
-
-
-/* Clase para el spinner */
-.spinner-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-}
-
-app-root {
-    flex: 1; /* Asegura que el contenido ocupe toda la altura restante */
+  padding-left: 16px;
+  padding-right: 16px;
+  height: 48px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* Ajustes para el footer */
+footer {
+  background-color: #1f2937;
+  color: white;
+  padding: 16px;
+  text-align: center;
+}
 
+/* Asegura que los iconos también se vuelvan blancos en modo oscuro */
+body.dark .mat-icon {
+  color: white !important;
+}
 
-/* Si deseas que el footer siempre se mantenga al fondo incluso con poco contenido */
+/* Asegura que los botones también sean visibles en modo oscuro */
+body.dark .mat-icon-button {
+  color: white !important;
+}
 
+/* Estilo para las filas y celdas de la tabla */
+body.dark .mat-header-cell {
+  background-color: #333 !important; /* Fondo oscuro para los encabezados */
+  color: white !important; /* Texto blanco */
+}
+
+body.dark .mat-cell {
+  color: white !important; /* Texto blanco en las celdas */
+}
+
+body.dark .mat-row {
+  background-color: #444 !important; /* Fondo de fila oscuro */
+}
+
+/* Ajustes para el filtro en modo oscuro */
+body.dark .mat-form-field-label {
+  color: white !important; /* Etiqueta de campo de formulario en blanco */
+}
+
+body.dark .mat-input-element {
+  color: white !important; /* Texto de entrada en blanco */
+}
+
+/* Otros ajustes generales */
+body.dark .mat-button {
+  background-color: #333 !important;
+  color: white !important;  /* Botones de texto blanco */
+}
+
+body.dark .mat-paginator {
+  background-color: #1f2937 !important; /* Fondo oscuro para el paginador */
+  color: white !important; /* Texto blanco */
+}
+
+body.dark .mat-radio-outer-circle {
+  border-color: white !important;  /* Radio buttons con borde blanco */
+}
+
+body.dark .mat-radio-inner-circle {
+  background-color: white !important; /* Círculo interior blanco */
+}
+
+/* Estilos adicionales personalizados para el filtro */
+body.dark .mat-form-field {
+  background-color: #444 !important; /* Fondo oscuro para los campos del formulario */
+  color: white !important;
+}
+
+body.dark .mat-input-element:focus {
+  border-color: #4caf50 !important; /* Borde verde cuando el campo está enfocado */
+}
+
+/* Asegurarse que el contenedor principal del filtro esté bien estilizado */
+body.dark .app-filter {
+  background-color: #333 !important;
+  color: white !important;
+}
+
+/* Asegurar que el texto del filtro y otros textos sean visibles en modo oscuro */
+body.dark .mat-sort-header, body.dark .mat-paginator {
+  color: white !important;
+}

@@ -1,93 +1,64 @@
-import { Injectable, inject } from '@angular/core';
-import { Firestore, doc, getDoc, setDoc, updateDoc, Timestamp, collection, getDocs } from '@angular/fire/firestore';
-import { Auth } from '@angular/fire/auth';
+import { Injectable } from '@angular/core';
+import { Firestore, doc, setDoc, getDoc, updateDoc, Timestamp } from '@angular/fire/firestore';
 import { Profile } from './profile.interface';
+import { AuthService } from '../auth/data-access/auth.service';
+import { inject } from '@angular/core';
+import { Storage, ref, uploadBytesResumable, getDownloadURL } from '@angular/fire/storage';
 
 /**
- * Servicio para gestionar el perfil del usuario en la base de datos de Firestore.
- * Este servicio permite obtener, crear y actualizar el perfil del usuario autenticado.
+ * Servicio para gestionar el perfil del usuario en la base de datos de Firestore y almacenamiento de imágenes.
+ * Este servicio permite obtener, crear, actualizar el perfil del usuario y gestionar las imágenes de perfil.
  */
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class ProfileService {
-  private readonly _firestore = inject(Firestore);  // Inyectamos el servicio de Firestore para interactuar con la base de datos.
-  private readonly _auth = inject(Auth);  // Inyectamos el servicio de autenticación para obtener el usuario autenticado.
-
-  /**
-   * Obtiene la referencia a la subcolección 'profile' del usuario autenticado en Firestore.
-   * 
-   * @throws Error Si el usuario no está autenticado.
-   * @returns La referencia a la subcolección 'profile' del usuario.
-   */
-  private _getUserProfileCollection() {
-    const user = this._auth.currentUser;  // Obtenemos el usuario autenticado.
-    if (!user) throw new Error('Usuario no autenticado');  // Si no hay usuario autenticado, lanzamos un error.
-    return collection(this._firestore, `users/${user.uid}/profile`);  // Retornamos la referencia a la subcolección 'profile' del usuario.
-  }
+  private _firestore = inject(Firestore);  // Instancia de Firestore
+  private _authService = inject(AuthService);  // Instancia de AuthService para obtener el UID del usuario
+  private _storage = inject(Storage);  // Instancia de Storage para gestionar imágenes en Firebase Storage
 
   /**
    * Obtiene el perfil del usuario autenticado.
-   * 
-   * @returns El perfil del usuario o null si no existe.
+   * Si el perfil no existe, lo crea con valores predeterminados.
    */
   async getProfile(): Promise<Profile | null> {
-    const uid = this._auth.currentUser?.uid;  // Obtenemos el UID del usuario autenticado.
-    if (!uid) return null;  // Si no hay usuario logueado, retornamos null.
+    const uid = this._authService.getUserUid();
+    if (!uid) {
+      console.error('No user UID found.');
+      return null;
+    }
 
-    // Referencia al documento del perfil en la subcolección 'profile' del usuario.
-    const docRef = doc(this._firestore, `users/${uid}/profile`, uid);  // Usamos el UID como ID del documento.
-    const docSnap = await getDoc(docRef);  // Obtenemos el documento del perfil.
+    const profileRef = doc(this._firestore, 'users', uid);
+    const docSnap = await getDoc(profileRef);
 
     if (docSnap.exists()) {
-      return docSnap.data() as Profile;  // Si el perfil existe, lo retornamos.
+      return docSnap.data() as Profile;
     } else {
-      return null;  // Si no existe el perfil, retornamos null.
+      console.error('No profile found for user:', uid);
+      return null;
     }
   }
 
   /**
-   * Crea un perfil para el usuario autenticado si no existe.
-   * 
-   * @param profile El perfil a crear.
-   * @returns Una promesa que se resuelve cuando el perfil se ha creado correctamente.
+   * Crea o actualiza el perfil del usuario autenticado en Firestore.
+   * Si el perfil ya existe, lo actualiza; si no, lo crea.
+   * @param profile El perfil con los datos que deben ser guardados o actualizados.
    */
-  async createProfile(profile: Profile): Promise<void> {
-    const uid = this._auth.currentUser?.uid;  // Obtenemos el UID del usuario autenticado.
-    if (!uid) return;  // Si no hay usuario logueado, no hacemos nada.
+  async createOrUpdateProfile(profile: Profile): Promise<void> {
+    const uid = this._authService.getUserUid();
+    if (!uid) return;  // Si no hay usuario autenticado, no hacemos nada
 
-    const docRef = doc(this._firestore, `users/${uid}/profile`, uid);  // Usamos el UID como ID del documento.
+    const userRef = doc(this._firestore, 'users', uid);
 
-    // Verificamos si ya existe un perfil para este usuario.
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      console.log('El perfil ya existe, no se puede crear otro');
-      return;  // Si ya existe, no hacemos nada.
+    // Actualizamos o creamos el perfil
+    const existingProfile = await getDoc(userRef);
+    if (existingProfile.exists()) {
+      // Si el perfil ya existe, lo actualizamos
+      await updateDoc(userRef, { ...profile, updated: Timestamp.now() });
+    } else {
+      // Si el perfil no existe, lo creamos
+      await setDoc(userRef, { ...profile, created: Timestamp.now(), updated: Timestamp.now() });
     }
-
-    // Si no existe el perfil, lo creamos.
-    await setDoc(docRef, {
-      ...profile,  // Copiamos los datos del perfil.
-      created: Timestamp.now(),  // Asignamos la fecha de creación.
-      updated: Timestamp.now(),  // Asignamos la fecha de actualización.
-    });
   }
 
-  /**
-   * Actualiza el perfil del usuario autenticado.
-   * 
-   * @param profile El perfil con los datos actualizados.
-   * @returns Una promesa que se resuelve cuando el perfil se ha actualizado correctamente.
-   */
-  async updateProfile(profile: Profile): Promise<void> {
-    const uid = this._auth.currentUser?.uid;  // Obtenemos el UID del usuario autenticado.
-    if (!uid) return;  // Si no hay usuario logueado, no hacemos nada.
-
-    // Referencia al documento del perfil en la subcolección 'profile' del usuario.
-    const docRef = doc(this._firestore, `users/${uid}/profile`, uid);  // Usamos el UID como ID del documento.
-
-    // Actualizamos el documento con los nuevos datos.
-    await updateDoc(docRef, {
-      ...profile,  // Copiamos los datos del perfil actualizado.
-      updated: Timestamp.now(),  // Actualizamos la fecha de actualización.
-    });
-  }
 }

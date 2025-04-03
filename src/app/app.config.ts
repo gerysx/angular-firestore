@@ -6,6 +6,8 @@ import { routes } from './app.routes';  // Importación de las rutas de la aplic
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';  // Proveedor para inicializar la aplicación Firebase
 import { getAuth, provideAuth } from '@angular/fire/auth';  // Proveedor para la autenticación en Firebase
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';  // Proveedor para Firestore en Firebase
+import { getStorage, provideStorage } from '@angular/fire/storage';
+
 
 // Toastr imports
 import { importProvidersFrom } from '@angular/core';
@@ -72,6 +74,10 @@ export const appConfig: ApplicationConfig = {
      * - `closeButton`: Agrega un botón de cierre al toast.
      * - `progressBar`: Muestra una barra de progreso en el toast.
      */
+
+    provideStorage(() => getStorage()),
+
+    
     importProvidersFrom(
       BrowserAnimationsModule,
       ToastrModule.forRoot({

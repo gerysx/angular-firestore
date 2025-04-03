@@ -1,16 +1,10 @@
-<section>
-  <mat-card>
+
+<section >
+  <mat-card class="bg-white dark:bg-gray-900 ">
     <mat-card-content>
-      @defer () {
       <app-toolbar (onNewContactEvent)="onClickNewContact()" />
       <router-outlet />
-      }@loading(minimum 1s) {
-      <div class="spinner-container">
-        <mat-spinner mode="indeterminate"></mat-spinner>
-      </div>
-      }
       <app-footer></app-footer>
     </mat-card-content>
   </mat-card>
 </section>
-

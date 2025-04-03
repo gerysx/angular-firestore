@@ -1,96 +1,92 @@
-<div class="container mx-auto rounded bg-white mt-5 mb-5 p-5">
+<div class="container mx-auto rounded bg-white dark:bg-gray-900 mt-5 mb-5 p-5">
   <div class="flex flex-wrap">
     <!-- Columna izquierda (Foto y Nombre) -->
     <div class="w-full sm:w-1/4 border-b sm:border-b-0 sm:border-r mb-5 sm:mb-0">
       <div class="flex flex-col items-center text-center p-3 py-5">
-        <img
-          class="rounded-full mt-5"
-          width="150px"
-          src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
-          alt="Usuario"
-        />
-        <span class="font-bold text-lg">{{ profile?.nombre || "Usuario" }}</span>
+        <!-- Imagen de perfil con opción para cargar nueva -->
+        <div class="relative">
+          <img
+            class="rounded-full mt-5 cursor-pointer"
+            width="150px"
+            src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+            alt="Usuario"
+          />
+        </div>
+        <span class="font-bold text-lg text-gray-900 dark:text-white">{{ profile?.nombre || "Usuario" }}</span>
       </div>
     </div>
 
     <!-- Columna derecha (Formulario) -->
     <div class="w-full sm:w-3/4 p-4">
-      <h4 class="text-right text-xl font-semibold mb-5">Ajustes de perfil</h4>
+      <h4 class="text-right text-xl font-semibold mb-5 text-gray-900 dark:text-white">Ajustes de perfil</h4>
 
       <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label class="block text-sm font-semibold">Nombre</label>
+            <label class="block text-sm font-semibold text-gray-900 dark:text-white">Nombre</label>
             <input
               formControlName="nombre"
               type="text"
-              class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
-            />
+              class="input-style p-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full dark:bg-gray-800 dark:text-white" />
           </div>
           <div>
-            <label class="block text-sm font-semibold">Apellido</label>
+            <label class="block text-sm font-semibold text-gray-900 dark:text-white">Apellido</label>
             <input
               formControlName="apellido"
               type="text"
-              class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
-            />
+              class="input-style p-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full dark:bg-gray-800 dark:text-white" />
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label class="block text-sm font-semibold">Móvil</label>
+            <label class="block text-sm font-semibold text-gray-900 dark:text-white">Móvil</label>
             <input
               formControlName="movil"
               type="text"
-              class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
-            />
+              class="input-style p-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full dark:bg-gray-800 dark:text-white" />
           </div>
           <div>
-            <label class="block text-sm font-semibold">Código Postal</label>
+            <label class="block text-sm font-semibold text-gray-900 dark:text-white">Código Postal</label>
             <input
               formControlName="cod_postal"
               type="text"
-              class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
-            />
+              class="input-style p-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full dark:bg-gray-800 dark:text-white" />
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label class="block text-sm font-semibold">Ciudad</label>
+            <label class="block text-sm font-semibold text-gray-900 dark:text-white">Ciudad</label>
             <input
               formControlName="ciudad"
               type="text"
-              class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
-            />
+              class="input-style p-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full dark:bg-gray-800 dark:text-white" />
           </div>
           <div>
-            <label class="block text-sm font-semibold">Email</label>
+            <label class="block text-sm font-semibold text-gray-900 dark:text-white">Email</label>
             <input
               formControlName="email"
               type="email"
-              class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
-            />
+              class="input-style p-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full dark:bg-gray-800 dark:text-white" />
           </div>
         </div>
 
-        <div class="mb-4">
-          <label class="block text-sm font-semibold">País</label>
-          <input
-            formControlName="pais"
-            type="text"
-            class="input-style p-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full"
-          />
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-sm font-semibold text-gray-900 dark:text-white">País</label>
+            <input
+              formControlName="pais"
+              type="text"
+              class="input-style p-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 w-full dark:bg-gray-800 dark:text-white" />
+          </div>
         </div>
 
-        <div class="mt-5 text-center">
-          <!-- Botón que cambia según si es nuevo perfil o no -->
+        <div class="text-center mt-5">
           <button
-            class="w-full py-2 px-4 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
             type="submit"
-          >
-            {{ isNewProfile ? "Guardar cambios" : "Actualizar perfil" }}
+            class="btn-submit w-full sm:w-auto py-2 px-6 rounded-md text-white bg-green-500 hover:bg-green-600 transition-colors">
+            {{ isNewProfile ? 'Crear perfil' : 'Actualizar perfil' }}
           </button>
         </div>
       </form>
